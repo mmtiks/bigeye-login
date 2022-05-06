@@ -16,7 +16,7 @@
             <form action="<?php $PHP_SELF; ?>" method="post">
                 <div class="form-object">
                     <label>Username</label>
-                    <input type="text" name="user" required>
+                    <input type="text" name="user" id="username" required>
                 </div>
                 <div class="form-object">
                     <label>Password</label>

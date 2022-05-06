@@ -17,15 +17,15 @@
             <form action="<?php $PHP_SELF; ?>" method="post">
                 <div class="form-object">
                     <label>Username</label>
-                    <input type="text" name="user" class="form-control" required>
+                    <input type="text" name="user" id="username" required>
                 </div>
                 <div class="form-object">
                     <label>Password</label>
-                    <input type="password" name="password" class="form-control" required>
+                    <input type="password" name="password" required>
                 </div>
                 <div class="form-object">
                     <label>Password</label>
-                    <input type="password" name="password2" class="form-control" required>
+                    <input type="password" name="password2" required>
                 </div>
                 <p id="message"></p>
                 <button type="submit" name="submit" class="btn btn-primary"> Register </button>
