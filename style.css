@@ -32,6 +32,7 @@ body {
     z-index: -1;
 }
 
+
 input {
     font-size: 16px;
     border: none;
@@ -39,6 +40,10 @@ input {
     color: white;
     background-color: #1B202B;
     font-family: 'Roboto Mono', monospace;
+}
+::placeholder{
+    color: lightgrey;
+    font-size: 14.5px;
 }
 
 input:focus {

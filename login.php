@@ -6,8 +6,8 @@
 </head>
 
 <body>
-<div id="color"></div>
-<div id="color2"></div>
+    <div id="color"></div>
+    <div id="color2"></div>
 
     <div class="container">
         <div class="row">
@@ -15,7 +15,7 @@
             <h2> Login here</h2>
             <form action="<?php $PHP_SELF; ?>" method="post">
                 <div class="form-object">
-                    <label>Username</label>
+                    <label>Name/Mail</label>
                     <input type="text" name="user" id="username" required>
                 </div>
                 <div class="form-object">
@@ -47,7 +47,7 @@ mysqli_select_db($connect, 'loginregister');
 $name = $_POST['user'];
 $password = $_POST['password'];
 
-$s = " select * from users where username = '$name' && password = '$password'";
+$s = " select * from users where (name = '$name' || email = '$name') && password = '$password'";
 
 $result = mysqli_query($connect, $s);
 
@@ -56,7 +56,7 @@ $num = mysqli_num_rows($result);
 if($num==1){
     header('location:in.php');
 } else{
-    echo '<script type="text/javascript">jsFunction("wrong username or password");</script>';
+    echo '<script type="text/javascript">jsFunction("wrong username/email or password");</script>';
 }
 }
 ?>
