@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <html>
 
 <head>
@@ -19,6 +22,7 @@
                     <input type="text" name="user" id="username" required>
                 </div>
                 <div class="form-object">
+
                     <label>Email Ad</label>
                     <input type="text" placeholder="example@mail.com" name="mail" id="mail" required>
                 </div>
@@ -42,48 +46,42 @@
 </html>
 
 <?php
-
-session_start();
 if (isset($_POST['submit'])) {
-    $connect = mysqli_connect('localhost', 'root', '');
-
-    mysqli_select_db($connect, 'loginregister');
+    include("db.php");
 
     $mail = $_POST['mail'];
-    $name = $_POST['user'];
-    $password = $_POST['password'];
+    $username = $_POST['user'];
+    $passwordd = $_POST['password'];
     $password2 = $_POST['password2'];
     // https://stackoverflow.com/questions/13447539/php-preg-match-with-email-validation-issue
     $pattern = "/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,})$/i";
 
-
-    if(!(preg_match($pattern, $mail))){
+    if (!(preg_match($pattern, $mail))) {
         echo '<script type="text/javascript">jsFunction("invalid e-mail aadress");</script>';
         exit();
-    }
-    else if($password != $password2){
+    } else if ($passwordd != $password2) {
         echo '<script type="text/javascript">jsFunction("passwords don\'t match");</script>';
         exit();
-    } else if (strlen($password) < 6){
+    } else if (strlen($passwordd) < 6) {
         echo '<script type="text/javascript">jsFunction("password should have at least 6 characters");</script>';
         exit();
-    } else if (!(preg_match('~[0-9]+~', $password))){
+    } else if (!(preg_match('~[0-9]+~', $passwordd))) {
         echo '<script type="text/javascript">jsFunction("password should have at least 1 number");</script>';
         exit();
     }
-    $s = " select * from users where name = '$name'";
 
-    $result = mysqli_query($connect, $s);
+    $stmt = $pdo->prepare('SELECT * FROM users WHERE name = :username OR email = :mail');
+    $stmt->execute(array('username' => $username, 'mail' => $mail));
+    $posts = $stmt->fetchAll();
 
-    $num = mysqli_num_rows($result);
+    $regstmt = $pdo->prepare('INSERT INTO users(email, name, password) VALUES(?,?,?)');
 
-    if ($num == 1) {
-        echo '<script type="text/javascript">jsFunction("username already exists");</script>';
+    if (count($posts) == 1) {
+        echo '<script type="text/javascript">jsFunction("username or email is already in use");</script>';
     } else {
-        $reg = " insert into users(email, name , password) values ('$mail', '$name' , '$password')";
-        mysqli_query($connect, $reg);
+        $hash = password_hash($passwordd, PASSWORD_DEFAULT);
+        $regstmt->execute(array($mail, $username, $hash));
         echo '<script type="text/javascript">jsFunction("you have been registered successfully");</script>';
-
     }
 }
 ?>
